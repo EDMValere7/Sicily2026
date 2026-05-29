@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>🌊 Sicilia 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,600;0,700;1,400&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#fff;min-height:100vh}
+::-webkit-scrollbar{width:0}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes popIn{from{opacity:0;transform:translateY(30px) scale(0.94)}to{opacity:1;transform:translateY(0) scale(1)}}
+.day-btn:hover{transform:translateY(-2px)!important;box-shadow:0 8px 24px rgba(0,0,0,0.12)!important}
+.back-btn:hover{background:#ebebeb!important}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useEffect}=React;
+const hotel={name:"B&B Lastracu",address:"SS187, n°80 — 91014 Castellammare del Golfo (TP)",phone:"3387690526",phoneDisplay:"338 769 0526",maps:"https://www.google.com/maps/search/?api=1&query=B%26B+Lastracu+SS187+Castellammare+del+Golfo+TP"};
+const days=[
+{id:1,date:"Lunedì 1 Giugno",title:"Arrivo in Sicilia",emoji:"✈️",color:"#FF6B6B",frase:"Binvinutu in Sicilia! Ora si mangia!",trad:"Benvenuto in Sicilia! Adesso si mangia! 🍝",
+attivita:[
+{id:"1a",t:"04:45",e:"🚗",n:"Partenza da Brescia",d:"Sveglia presto e via! Partenza da Brescia alle 04:45 verso l'aeroporto di Orio al Serio.",m:"https://www.google.com/maps/search/?api=1&query=Aeroporto+Orio+al+Serio+Bergamo"},
+{id:"1b",t:"05:30",e:"🅿️",n:"Parcheggio Parkos P2 — Orio al Serio",d:"Gestore: Parkos — P2 Terminal, Settore B Coperto.\nArrivo al parcheggio: 05:30.\nIndirizzo: Orio al Serio (BG). Seguire indicazioni per P2.",m:"https://www.google.com/maps/search/?api=1&query=Parkos+P2+Aeroporto+Orio+al+Serio+Bergamo"},
+{id:"1c",t:"08:10",e:"✈️",n:"Volo Milano BGY → Palermo — FR6149 Ryanair",d:"Volo Ryanair FR6149.\nDecollo: 08:10 — Atterraggio: 09:50.\nDurata: circa 1h 40min. Buon volo! 🛫",m:"https://www.google.com/maps/search/?api=1&query=Aeroporto+Falcone+Borsellino+Palermo"},
+{id:"1d",t:"09:50",e:"🚗",n:"Ritiro Auto e Trasferimento a Castellammare",d:"All'aeroporto di Palermo Falcone Borsellino, ritiro auto a noleggio.\nDirezione Castellammare del Golfo per il check-in al B&B Lastracu. Circa 1 ora di guida.",m:"https://www.google.com/maps/dir/Aeroporto+di+Palermo+Falcone+Borsellino/Castellammare+del+Golfo+TP"},
+{id:"1e",t:"11:00",e:"🌅",n:"Check-in al B&B — Giornata Relax",d:"Arrivo al B&B Lastracu, check-in e sistemazione.\nGiornata a disposizione per relax e ambientamento.\nGodetevi il profumo del Mediterraneo! 🌺",m:"https://www.google.com/maps/search/?api=1&query=Castellammare+del+Golfo+lungomare"},
+{id:"1f",t:"20:15",e:"🍽️",n:"Cena — Trattoria Due Terre",d:"Prima cena siciliana!\nRistorante: Trattoria Due Terre\nIndirizzo: Corso Giuseppe Garibaldi 200, Castellammare del Golfo (TP)\nTelefono: 338 588 8127",m:"https://www.google.com/maps/search/?api=1&query=Trattoria+Due+Terre+Corso+Garibaldi+Castellammare+del+Golfo"},
+]},
+{id:2,date:"Martedì 2 Giugno",title:"Tonnara di Scopello",emoji:"🌊",color:"#4ECDC4",frase:"Lu mari chiama... e nuàtri risponnimu!",trad:"Il mare chiama... e noi rispondiamo! 🌊",
+attivita:[
+{id:"2a",t:"09:45",e:"🚗",n:"Partenza dal B&B verso Scopello",d:"Partenza ore 09:45. Breve tragitto di circa 15 minuti fino alla Tonnara di Scopello.",m:"https://www.google.com/maps/dir/Castellammare+del+Golfo/Tonnara+di+Scopello"},
+{id:"2b",t:"10:00",e:"🅿️",n:"Parcheggio Tonnara di Scopello",d:"Indirizzo: Traversa di Via Finanziere / Via Vincenzo Bellini, 91014 Castellammare del Golfo (TP).\nParcheggio a pagamento vicino all'ingresso della Tonnara.",m:"https://www.google.com/maps/search/?api=1&query=Parcheggio+Tonnara+di+Scopello+Castellammare+del+Golfo"},
+{id:"2c",t:"10:30",e:"🏛️",n:"Visita Guidata al Museo — Orari: 10:30–17:00",d:"La guida accompagnerà nella visita degli antichi locali storici:\n• Storia della famiglia Florio e la tonnara\n• Vecchi magazzini del sale, delle reti e degli attrezzi da pesca\n• Imbarcazioni originali (le \"lance\") usate per la mattanza\n• Mostre fotografiche sulla vita dei tonnaroti",m:"https://www.google.com/maps/search/?api=1&query=Tonnara+di+Scopello+museo"},
+{id:"2d",t:"11:30",e:"🌊",n:"Relax alle Aree Esterne e ai Faraglioni",d:"Tempo libero dopo la visita guidata:\n• Relax di fronte ai Faraglioni (accesso incluso nel biglietto)\n• Bagno e snorkeling nel mare trasparente\n• Sessione fotografica: baglio antico, ancore monumentali\n• Pausa al chiosco interno: bibite, caffè, snack\n\n💡 Portare: maschera + boccaglio, telo da mare, crema solare.",m:"https://www.google.com/maps/search/?api=1&query=Faraglioni+di+Scopello"},
+{id:"2e",t:"17:00",e:"🏘️",n:"Optional — Visita Borgo Scopello",d:"Se avanza energia, visitate il caratteristico borgo medievale di Scopello con il suo antico baglio e le viette pittoresche.",m:"https://www.google.com/maps/search/?api=1&query=Borgo+di+Scopello+Castellammare+del+Golfo"},
+]},
+{id:3,date:"Mercoledì 3 Giugno",title:"Palermo",emoji:"🏛️",color:"#D4AC0D",frase:"Palermu è bedda comu 'u suli!",trad:"Palermo è bella come il sole! ☀️",
+attivita:[
+{id:"3a",t:"09:30",e:"🚗",n:"Partenza da Castellammare → Palermo",d:"Partenza ore 09:30. Imboccare l'autostrada A29 in direzione Palermo. Circa 1 ora di viaggio.",m:"https://www.google.com/maps/dir/Castellammare+del+Golfo/Palermo"},
+{id:"3b",t:"10:25",e:"🅿️",n:"Parcheggio APCOA Orlando — P.zza V.E. Orlando 49",d:"Parcheggio APCOA Orlando in Piazza Vittorio Emanuele Orlando 49, Palermo.\nPrendere il ticket all'ingresso. Pagare alle casse automatiche APCOA al rientro.",m:"https://www.google.com/maps/search/?api=1&query=Parcheggio+APCOA+Orlando+Palermo"},
+{id:"3c",t:"10:40",e:"⛪",n:"Cattedrale di Palermo",d:"Ingresso gratuito. Tombe reali di Federico II, navate imponenti.\nGiro esterno per fotografare le absidi arabo-normanne.\nDa Parcheggio Orlando: ~12 minuti a piedi.",m:"https://www.google.com/maps/search/?api=1&query=Cattedrale+di+Palermo"},
+{id:"3d",t:"11:20",e:"🛒",n:"Mercato di Ballarò",d:"Uno dei mercati più antichi e vivaci d'Europa!\nCamminare lungo tutta Via Ballarò.\nStreet food imperdibile: panelle e crocchè al volo (€2–3).\nColori, profumi e voci — un'esperienza unica.",m:"https://www.google.com/maps/search/?api=1&query=Mercato+di+Ballaro+Palermo"},
+{id:"3e",t:"12:35",e:"🏛️",n:"Quattro Canti & Piazza Pretoria",d:"Quattro Canti: il cuore dell'incrocio con le quattro facciate barocche del '600.\nTre passi a destra: la Fontana della Vergogna in Piazza Pretoria!",m:"https://www.google.com/maps/search/?api=1&query=Quattro+Canti+Palermo"},
+{id:"3f",t:"12:50",e:"🍮",n:"I Segreti del Chiostro — Pasticceria nel Convento",d:"Monastero di Santa Caterina d'Alessandria, Piazza Bellini 33.\nCannolo espresso XL riempito sul momento oppure cassata.\nTavoli nel chiostro interno. 55 minuti di pausa rigenerante!",m:"https://www.google.com/maps/search/?api=1&query=I+Segreti+del+Chiostro+Piazza+Bellini+Palermo"},
+{id:"3g",t:"14:00",e:"🏘️",n:"Quartiere della Kalsa",d:"Piazza San Francesco d'Assisi → Via Torremuzza → Piazza Marina: Palazzo Chiaramonte-Steri con i ficus giganti centenari.",m:"https://www.google.com/maps/search/?api=1&query=Quartiere+La+Kalsa+Palermo"},
+{id:"3h",t:"14:30",e:"⛵",n:"La Cala — Porto Antico di Palermo",d:"Passeggiata sulla banchina tra le barche a vela.\nSkyline della città con la brezza marina.\nIl porto più antico di Palermo, cuore della città per millenni.",m:"https://www.google.com/maps/search/?api=1&query=La+Cala+Porto+Antico+Palermo"},
+{id:"3i",t:"15:30",e:"🚗",n:"Rientro a Castellammare del Golfo",d:"Recupero auto al parcheggio APCOA, poi A29 direzione Trapani/Mazara del Vallo.\nArrivo previsto a Castellammare circa ore 16:30.",m:"https://www.google.com/maps/dir/Palermo/Castellammare+del+Golfo"},
+]},
+{id:4,date:"Giovedì 4 Giugno",title:"Agrigento & Scala dei Turchi",emoji:"🏛️",color:"#E8A838",frase:"Li templi sunnu antichi... ma nuàtri simu cchiù forti!",trad:"I templi sono antichi... ma noi siamo più forti! 💪",
+attivita:[
+{id:"4a",t:"08:45",e:"🚗",n:"Partenza da Castellammare → Agrigento",d:"Partenza ore 08:45. Rientro tassativo ore 19:00!\nPercorso: A29 dir. Mazara → uscita Castelvetrano → SS115 dir. Agrigento. Circa 2 ore.",m:"https://www.google.com/maps/dir/Castellammare+del+Golfo/Agrigento"},
+{id:"4b",t:"10:35",e:"🅿️",n:"Parcheggio Valle dei Templi — Porta Quinta",d:"Navigatore su: Parcheggio Porta Quinta (Sant'Anna), Agrigento.\nParcheggio ufficiale per la Via Sacra. Costo circa €3–5.",m:"https://www.google.com/maps/search/?api=1&query=Parcheggio+Porta+Quinta+Valle+dei+Templi+Agrigento"},
+{id:"4c",t:"11:00",e:"🏛️",n:"Valle dei Templi — 11:00–13:15",d:"Uno dei siti archeologici più belli del mondo!\nTempli principali:\n• Tempio della Concordia (il meglio conservato)\n• Tempio di Giunone\n• Tempio di Ercole\nRientrare all'auto entro le 13:15.",m:"https://www.google.com/maps/search/?api=1&query=Valle+dei+Templi+Agrigento"},
+{id:"4d",t:"13:35",e:"🏖️",n:"Lido Rossello — Realmonte",d:"Spostamento: SS115 dir. Realmonte (16 km / 20 min).\nParcheggio: GPS su Lido Rossello Realmonte. Sosta custodita (~€5). 2 min a piedi dalla spiaggia.\nPranzo all'Oasi Bar o Bar Nicos: arancini, tavola calda, panini.",m:"https://www.google.com/maps/search/?api=1&query=Lido+Rossello+Realmonte"},
+{id:"4e",t:"14:30",e:"🌊",n:"Relax e Bagno al Lido Rossello",d:"Mare pulito, fondale basso e ideale per il bagno.\nPossibilità noleggio lettini e ombrelloni.\nDocce disponibili in spiaggia.",m:"https://www.google.com/maps/search/?api=1&query=Spiaggia+Lido+Rossello+Realmonte"},
+{id:"4f",t:"15:55",e:"🤍",n:"Scala dei Turchi — La Scogliera Bianca",d:"Solo 3 km dalla spiaggia sulla SP15!\nParcheggio: GPS su Scala dei Turchi Belvedere.\nSentiero del Belvedere → passerella sulla famosa scogliera bianca.\nBiglietto sul posto. Non mancate le foto! 📸",m:"https://www.google.com/maps/search/?api=1&query=Scala+dei+Turchi+Realmonte+Agrigento"},
+{id:"4g",t:"17:00",e:"🚗",n:"⚠️ Partenza da Realmonte — Rientro",d:"ATTENZIONE: Non sforare l'orario per evitare code sulla statale!\nPercorso: SS115 → A29 a Castelvetrano → uscita Castellammare del Golfo.\nArrivo previsto: ore 19:00.",m:"https://www.google.com/maps/dir/Realmonte+AG/Castellammare+del+Golfo+TP"},
+]},
+{id:5,date:"Venerdì 5 Giugno",title:"Trapani",emoji:"🗼",color:"#5DADE2",frase:"A Trappani l'acqua è comu nu specchiu d'argentu!",trad:"A Trapani l'acqua è come uno specchio d'argento! 🪞",
+attivita:[
+{id:"5a",t:"10:00",e:"🚗",n:"Partenza verso Trapani",d:"Percorso SS187 in direzione Trapani. Circa 45 minuti di guida panoramica lungo la costa.",m:"https://www.google.com/maps/dir/Castellammare+del+Golfo/Trapani"},
+{id:"5b",t:"10:45",e:"🅿️",n:"Parcheggio Piazza Vittorio Emanuele — Trapani",d:"Navigatore su: Piazza Vittorio Emanuele, Trapani.\nStrisce blu in piazza o in Via Ilio.\nBiglietto parchimetro per ~3 ore (fino alle 14:00).",m:"https://www.google.com/maps/search/?api=1&query=Piazza+Vittorio+Emanuele+Trapani"},
+{id:"5c",t:"11:15",e:"⛪",n:"Chiesa del Purgatorio — I Misteri",d:"Via della Luce → Via Purgatorio. Ingresso libero.\nI 20 \"Misteri\": gruppi scultorei in legno e tela del 1600.\nPortati in processione ogni Venerdì Santo. Dedicare 20 minuti.",m:"https://www.google.com/maps/search/?api=1&query=Chiesa+del+Purgatorio+Trapani"},
+{id:"5d",t:"11:45",e:"🏛️",n:"Corso Vittorio Emanuele — Centro Storico",d:"Palazzo Senatorio (Cavarretta) — elegante sede del Comune.\nPorta Oscura con l'Orologio Astronomico del 1596: misura anche lo zodiaco e il calendario lunare!",m:"https://www.google.com/maps/search/?api=1&query=Corso+Vittorio+Emanuele+Trapani"},
+{id:"5e",t:"12:20",e:"🍧",n:"Antica Pasticceria Colicchia — Sosta Golosa",d:"Via delle Arti 6/8 — la pasticceria più famosa di Trapani!\nGranita al limone o alla mandorla tostata con brioche col tuppo.\nOppure il cannolo riempito al momento. Imperdibile! 😋",m:"https://www.google.com/maps/search/?api=1&query=Pasticceria+Colicchia+Trapani"},
+{id:"5f",t:"12:45",e:"🏰",n:"Mura di Tramontana — Passeggiata Panoramica",d:"Piazza Mercato del Pesce → scalinata sulle mura spagnole.\nPasseggiata panoramica con il Mar Tirreno a destra.\nViste mozzafiato sulla città e sul mare.",m:"https://www.google.com/maps/search/?api=1&query=Mura+di+Tramontana+Trapani"},
+{id:"5g",t:"13:25",e:"🗼",n:"Torre di Ligny — Punto Più Occidentale",d:"Via Torre di Ligny — lingua di terra lambita dal mare su entrambi i lati!\nDove il Tirreno e il Canale di Sicilia si incontrano.\nCollezione archeologica + terrazza panoramica. Vista sulle Isole Egadi.",m:"https://www.google.com/maps/search/?api=1&query=Torre+di+Ligny+Trapani"},
+{id:"5h",t:"14:00",e:"⚓",n:"Porto Peschereccio e La Marina",d:"Via Ammiraglio Staiti → Porto Peschereccio.\nPescatori che riparano reti, barche colorate, cantieri artigianali.\nViale Regina Elena: grandi yacht, palazzi storici, Villa Margherita.",m:"https://www.google.com/maps/search/?api=1&query=Porto+peschereccio+Trapani"},
+{id:"5i",t:"15:20",e:"🏖️",n:"Baia Santa Margherita — Macari",d:"SP18 nord (dir. San Vito Lo Capo/Macari) — 35 min. Itinerario panoramico lungo il Monte Cofano.\nAmpio parcheggio sterrato a Macari. Trenino-navetta gratuito (in stagione) o 5 min a piedi.\n2 ore di relax: acqua turchese, sabbia fine, calette caraibiche! 🌴",m:"https://www.google.com/maps/search/?api=1&query=Baia+Santa+Margherita+Macari+San+Vito+Lo+Capo"},
+{id:"5j",t:"17:15",e:"🚗",n:"Rientro a Castellammare del Golfo",d:"Percorso: Macari → Custonaci → SS187.\nArrivo previsto ore 18:00.",m:"https://www.google.com/maps/dir/Macari+San+Vito+Lo+Capo/Castellammare+del+Golfo"},
+]},
+{id:6,date:"Sabato 6 Giugno",title:"Marsala & Saline",emoji:"🍷",color:"#8E44AD",frase:"Vinu bonu e salineddi... chisti su' li cosi veri!",trad:"Buon vino e saline... queste sono le cose vere! 🍷",
+attivita:[
+{id:"6a",t:"14:15",e:"🚗",n:"Partenza verso Marsala",d:"Partenza pomeriggio: A29dir dir. Trapani/Marsala → scorrimento veloce.\nCirca 1h 15 minuti di viaggio.",m:"https://www.google.com/maps/dir/Castellammare+del+Golfo/Marsala+TP"},
+{id:"6b",t:"15:30",e:"🅿️",n:"Parcheggio Centro Storico Marsala",d:"Navigatore su: Piazza della Vittoria, Marsala (Villa Cavallotti).\nStrisce blu o posti bianchi disponibili. Biglietto per ~2 ore.",m:"https://www.google.com/maps/search/?api=1&query=Piazza+della+Vittoria+Marsala+parcheggio"},
+{id:"6c",t:"15:30",e:"🏛️",n:"Porta Nuova e Via XI Maggio",d:"Porta Nuova: eretta nel 1500 per Carlo V.\nIngresso su Via XI Maggio (\"il Cassaro\") — la più elegante via pedonale di Marsala.",m:"https://www.google.com/maps/search/?api=1&query=Porta+Nuova+Marsala"},
+{id:"6d",t:"15:40",e:"🎖️",n:"Museo Garibaldino — Complesso San Pietro",d:"Via Ludovico Anselmi Correale. Cortile a loggiati.\nMuseo Garibaldino: cimeli, camicie rosse, armi dello sbarco dei Mille (11 maggio 1860). 30 minuti ben spesi!",m:"https://www.google.com/maps/search/?api=1&query=Complesso+San+Pietro+Marsala+museo+garibaldino"},
+{id:"6e",t:"16:15",e:"⛪",n:"Duomo di San Tommaso di Canterbury",d:"In Piazza della Repubblica. Navate barocche magnifiche.\nPalazzo VII Aprile di fronte. Cuore storico e spirituale di Marsala.",m:"https://www.google.com/maps/search/?api=1&query=Cattedrale+Marsala+Piazza+della+Repubblica"},
+{id:"6f",t:"16:35",e:"🍷",n:"Pausa Golosa — Pasticceria De Gaetano",d:"Via Garraffa. Antica Pasticceria De Gaetano.\nSpagnoletta marsalese (pan di spagna, ricotta, gocce di cioccolato).\nAbbinata a un calice di Marsala DOC Vergine. Una delizia! 😍",m:"https://www.google.com/maps/search/?api=1&query=Pasticceria+De+Gaetano+Marsala"},
+{id:"6g",t:"17:30",e:"🌾",n:"Saline Ettore e Infersa — Mulini a Vento",d:"GPS su: Saline Ettore e Infersa, Contrada Ettore Infersa 91025 Marsala TP.\nStrada costiera SP21 — 15 minuti. Parcheggio di fronte al Mulino d'Infersa.\nVisita guidata dalle 18:00: mulini a vento, vasche di evaporazione, cultura del sale.",m:"https://www.google.com/maps/search/?api=1&query=Saline+Ettore+Infersa+Marsala"},
+{id:"6h",t:"19:00",e:"🌅",n:"Tramonto sulle Saline — Isola di Mozia",d:"Uno dei tramonti più celebri d'Europa!\nDal molo dell'imbarcadero di fronte all'isola di Mozia.\nIl sole tramonta sulle Egadi colorando l'acqua di rosa e arancio. 🌇\nPortate la macchina fotografica!",m:"https://www.google.com/maps/search/?api=1&query=Isola+di+Mozia+Marsala+tramonto"},
+{id:"6i",t:"19:50",e:"🚶",n:"Passeggiata Capo Lilibeo — Lungomare Boeo",d:"Il punto più occidentale della Sicilia!\nLungomare Boeo con il Monumento ai Mille sul mare.",m:"https://www.google.com/maps/search/?api=1&query=Capo+Lilibeo+Lungomare+Boeo+Marsala"},
+{id:"6j",t:"20:15",e:"🍽️",n:"Cena — Osteria Siciliando",d:"Ristorante: Osteria Siciliando\nIndirizzo: Via Giuseppe Garibaldi 73, Marsala (TP)\nAccesso: Attraversare Porta Garibaldi da Lungomare Boeo, 5 min a piedi.\nConsiglio: Couscous di pesce o busiate fresche. Vino: Grillo o Catarratto locale. 🐟",m:"https://www.google.com/maps/search/?api=1&query=Osteria+Siciliando+Marsala"},
+]},
+{id:7,date:"Domenica 7 Giugno",title:"Parrini · Terrasini · Barcarello · Piana",emoji:"⛪",color:"#27AE60",frase:"Diu fici lu munnu in sei jorna... nuàtri facemu sei paisi in unu!",trad:"Dio fece il mondo in sei giorni... noi facciamo sei paesi in uno! 😄",
+attivita:[
+{id:"7a",t:"09:30",e:"⛪",n:"Messa — Buona Domenica!",d:"Buona domenica! Messa mattutina prima di partire per la giornata di esplorazioni.",m:"https://www.google.com/maps/search/?api=1&query=chiesa+Castellammare+del+Golfo"},
+{id:"7b",t:"10:30",e:"🚗",n:"Partenza → Borgo Parrini",d:"A29 dir. Palermo → uscita Partinico → cartelli marroni \"Borgo Parrini\".\nCirca 30 minuti di viaggio.",m:"https://www.google.com/maps/dir/Castellammare+del+Golfo/Borgo+Parrini+Palermo"},
+{id:"7c",t:"11:00",e:"🎨",n:"Borgo Parrini — Il Paese in Stile Gaudì",d:"Ampio spiazzo sterrato all'ingresso. Parcheggio gratuito!\n• Camminare nella via principale tra le case in stile Gaudì\n• Fotografare la \"Casa della Pizza\": mosaici colorati e citazioni dipinte sui muri\n• Caffè nell'unico bar del borgo prima di ripartire",m:"https://www.google.com/maps/search/?api=1&query=Borgo+Parrini+Partinico+Palermo"},
+{id:"7d",t:"11:50",e:"📸",n:"Cala Rossa — Belvedere di Terrasini",d:"Fine di Via Calarossa — spiazzo belvedere sterrato. Gratuito!\nAmmirate dall'alto la spettacolare scogliera con le striature rosse verticali che contrastano col turchese del mare.\nFoto panoramiche senza scendere. Spettacolo della natura!",m:"https://www.google.com/maps/search/?api=1&query=Cala+Rossa+Terrasini+belvedere"},
+{id:"7e",t:"12:20",e:"🏛️",n:"Terrasini Paese — Centro Storico",d:"Parcheggio: Via Madonnina o strisce blu intorno a Piazza Duomo.\n• Chiesa Madre Maria Santissima delle Grazie — facciata monumentale in piazza\n• Passeggiata sul corso pedonale tra palme e palazzi storici\n• Pausa caffè in piazza",m:"https://www.google.com/maps/search/?api=1&query=Terrasini+centro+storico+Piazza+Duomo"},
+{id:"7f",t:"13:15",e:"🏖️",n:"Barcarello — Riserva di Capo Gallo",d:"A29 dir. Palermo → svincolo Sferracavallo → Barcarello. 20 minuti.\nParcheggio: Via Barcarello di fronte al mare.\n• Passerella di legno lungo la Riserva di Capo Gallo\n• Bagno principale della giornata in acqua tropicale trasparente 🏊\n• Gelato o granita al chiosco sul lungomare",m:"https://www.google.com/maps/search/?api=1&query=Barcarello+Sferracavallo+Palermo+spiaggia"},
+{id:"7g",t:"15:00",e:"🧁",n:"Piana degli Albanesi — Il Cannolo Leggendario",d:"A29 → Tangenziale → SS624 → bivio Piana degli Albanesi. 45 minuti totali.\nParcheggio: Viale 30 Agosto o Piazza Vittorio Emanuele.\nAntico Bar Extra o Pasticceria Cuccia: il leggendario cannolo gigante con ricotta grezza locale, riempito al momento. IL migliore della Sicilia! 🏆",m:"https://www.google.com/maps/search/?api=1&query=Piana+degli+Albanesi+cannolo"},
+{id:"7h",t:"15:30",e:"🏛️",n:"Visita Piana degli Albanesi — Paese Arbëreshë",d:"Corso Kastriota: cartelli bilingue italiano/Arbëreshë.\nCattedrale di San Demetrio Megalomartire (rito bizantino).\nUna cultura unica: gli albanesi arrivarono in Sicilia nel '400!",m:"https://www.google.com/maps/search/?api=1&query=Cattedrale+San+Demetrio+Megalomartire+Piana+degli+Albanesi"},
+{id:"7i",t:"16:05",e:"📸",n:"Lago di Piana — Il Bacino più Antico di Sicilia",d:"Piazzole lungo SP34 che costeggia il lago. Sosta panoramica.\nIl bacino artificiale più antico di Sicilia, circondato da montagne imponenti.\nUltimi scatti nel silenzio della natura. 🏔️",m:"https://www.google.com/maps/search/?api=1&query=Lago+di+Piana+degli+Albanesi"},
+{id:"7j",t:"16:20",e:"🚗",n:"Rientro a Castellammare del Golfo",d:"SS624 dir. Palermo → A29 dir. Trapani → uscita Castellammare del Golfo.\nArrivo previsto: 17:15–17:30.",m:"https://www.google.com/maps/dir/Piana+degli+Albanesi/Castellammare+del+Golfo"},
+]},
+{id:8,date:"Lunedì 8 Giugno",title:"Sciacca · Porto Palo · Mazara",emoji:"🕌",color:"#E74C3C",frase:"Tri citati, un jorno, e tanti ricordi meravigghiusi!",trad:"Tre città, un giorno, e tanti ricordi meravigliosi! 🗺️",
+attivita:[
+{id:"8a",t:"09:30",e:"🚗",n:"Partenza → Sciacca (1h 05 min via SS115)",d:"Tabella di marcia:\n• 09:30–10:35: Castellammare → Sciacca\n• 11:55–12:15: Sciacca → Porto Palo di Menfi\n• 14:15–14:40: Porto Palo → Mazara del Vallo\n• 16:00–16:45: Mazara → Castellammare (rientro fast)",m:"https://www.google.com/maps/dir/Castellammare+del+Golfo/Sciacca+AG"},
+{id:"8b",t:"10:38",e:"🏺",n:"Scalinata Maiolicata di Piazza Scandaliato",d:"Parcheggio: Piazza Mariano Rossi — ampio, fuori dalla ZTL.\nGradini rivestiti di maioliche colorate — foto obbligatoria!\nBelvedere: vista sul Lungomare di Sciacca con paranze e pescherecci colorati. 📸",m:"https://www.google.com/maps/search/?api=1&query=Piazza+Scandaliato+Sciacca+scalinata+maioliche"},
+{id:"8c",t:"11:03",e:"🏺",n:"Via della Ceramica — Teste di Moro",d:"Via Licata, 300 metri. Al civico 12: botteghe storiche dove gli artigiani torniano le celebri \"Teste di Moro\".\nLa ceramica di Sciacca è tra le più pregiose di Sicilia.",m:"https://www.google.com/maps/search/?api=1&query=Via+Licata+ceramica+Sciacca"},
+{id:"8d",t:"11:18",e:"🔴",n:"Il Corallo di Sciacca — Unico al Mondo",d:"Via Roma: vetrine dedicate al Corallo di Sciacca.\nUnico corallo subfossile al mondo con riflessi rosa e arancio bruciato.\nCuriosità geologica straordinaria da non perdere!",m:"https://www.google.com/maps/search/?api=1&query=Via+Roma+corallo+Sciacca"},
+{id:"8e",t:"11:33",e:"🍋",n:"Granita al Bar Scandaliato",d:"Bar Scandaliato in Piazza Scandaliato: granita al limone con brioche col tuppo.\nLa classica colazione siciliana a qualsiasi ora! 🍊",m:"https://www.google.com/maps/search/?api=1&query=Bar+Scandaliato+Sciacca"},
+{id:"8f",t:"12:15",e:"🏊",n:"Porto Palo di Menfi — Bandiera Blu",d:"SS115 dir. Realmonte (20 min).\nParcheggio: Lungomare di Porto Palo, lungo la via litoranea.\n• Spiaggia sabbiosa sotto la Torre Saracena del 1500 — acqua Bandiera Blu\n• Un'ora di nuotate in relax 🏖️",m:"https://www.google.com/maps/search/?api=1&query=Porto+Palo+di+Menfi+spiaggia"},
+{id:"8g",t:"13:30",e:"🥖",n:"Pane Cunzato sul Molo di Porto Palo",d:"Panificio Saladino o chioschi sul molo.\nPane Cunzato: pane caldo, olio EVO locale, pomodoro, origano, acciughe, primosale.\nMangiarlo sul molo con i piedi sull'acqua. La felicità è nelle cose semplici! 😊",m:"https://www.google.com/maps/search/?api=1&query=Porto+Palo+Menfi+molo"},
+{id:"8h",t:"14:40",e:"🕌",n:"Mazara del Vallo — La Kasbah",d:"25 min via SS115. Parcheggio: Piazza Plebiscito.\n• Piazza della Repubblica: Cattedrale e Palazzo Vescovile monumentali\n• Via Bagno: ingresso nella Kasbah araba — muri colorati, murales e poesie bilingue\n• Vicoli ciechi, cortili (i \"patri\"), profumi di cumino, menta e spezie nordafricane 🌿",m:"https://www.google.com/maps/search/?api=1&query=Kasbah+Mazara+del+Vallo"},
+{id:"8i",t:"15:15",e:"☕",n:"Pausa al Caffè Med — Tè alla Menta",d:"Caffè Med: tè alla menta con pinoli + Makroud (dolce tunisino di semola, datteri e miele).\nUn angolo di Africa nel cuore della Sicilia.",m:"https://www.google.com/maps/search/?api=1&query=Caffe+Med+Mazara+del+Vallo"},
+{id:"8j",t:"15:30",e:"🌴",n:"Lungomare Mazzini — Flotta Peschereccia",d:"Palme giganti, fontane, sculture moderne.\nLa flotta peschereccia più grande d'Italia all'orizzonte — impressionante!",m:"https://www.google.com/maps/search/?api=1&query=Lungomare+Mazzini+Mazara+del+Vallo"},
+{id:"8k",t:"16:00",e:"🚗",n:"Rientro Fast — A29 dir. Palermo",d:"A29 direzione Palermo — rettilineo scorrevole.\n45 minuti precisi per rientrare a Castellammare del Golfo.",m:"https://www.google.com/maps/dir/Mazara+del+Vallo/Castellammare+del+Golfo"},
+]},
+{id:9,date:"Martedì 9 Giugno",title:"Rientro a Casa",emoji:"🏠",color:"#7F8C8D",frase:"Sicilia, ti lassamu... ma 'u cori resta ccà!",trad:"Sicilia, ti lasciamo... ma il cuore resta qui! ❤️",
+attivita:[
+{id:"9a",t:"Mattina",e:"🌊",n:"Ultima Mattina al Mare — Relax",d:"Ultima mattina in Sicilia. Giornata di relax e ultimo tuffo nel mare di Castellammare del Golfo.\nFate le valigie con calma e godetevi ogni ultimo momento! 🌅",m:"https://www.google.com/maps/search/?api=1&query=spiaggia+Castellammare+del+Golfo"},
+{id:"9b",t:"19:00",e:"🚗",n:"Partenza per Aeroporto di Palermo",d:"Partenza ore 19:00 verso l'aeroporto Falcone Borsellino di Palermo.\nConsegna auto a noleggio all'aeroporto.\nArrivare con anticipo per i controlli.",m:"https://www.google.com/maps/dir/Castellammare+del+Golfo/Aeroporto+di+Palermo+Falcone+Borsellino"},
+{id:"9c",t:"22:25",e:"✈️",n:"Volo Palermo → Milano BGY — FR4968 Ryanair",d:"Volo Ryanair FR4968.\nDecollo: 22:25 — Atterraggio: 00:05 (giorno dopo)\nDurata: circa 1h 40min.\nUltimo sguardo alla Sicilia dalla finestra... arrivederci! ✈️",m:"https://www.google.com/maps/search/?api=1&query=Aeroporto+Falcone+Borsellino+Palermo+partenze"},
+{id:"9d",t:"00:05",e:"🏠",n:"Atterraggio Orio al Serio — Rientro a Casa",d:"Atterraggio all'aeroporto di Orio al Serio (BGY).\nRitiro auto al parcheggio Parkos P2 Settore B.\nRientro a casa. Che viaggio indimenticabile! 🥰",m:"https://www.google.com/maps/search/?api=1&query=Parkos+P2+Orio+al+Serio+Bergamo"},
+]},
+];
+
+function Modal({day,onClose}){
+  const[vis,setVis]=useState(false);
+  useEffect(()=>{const t=setTimeout(()=>setVis(true),40);return()=>clearTimeout(t);},[]);
+  const close=()=>{setVis(false);setTimeout(onClose,350);};
+  return(
+    <div onClick={close} style={{position:"fixed",inset:0,zIndex:1000,background:"rgba(0,0,0,0.52)",display:"flex",alignItems:"center",justifyContent:"center",padding:20,opacity:vis?1:0,transition:"opacity 0.35s",backdropFilter:"blur(5px)"}}>
+      <div onClick={e=>e.stopPropagation()} style={{background:"#fff",borderRadius:28,padding:"38px 28px 32px",maxWidth:380,width:"100%",textAlign:"center",boxShadow:"0 24px 70px rgba(0,0,0,0.18)",position:"relative",animation:"popIn 0.45s cubic-bezier(0.34,1.56,0.64,1) both"}}>
+        <button onClick={close} style={{position:"absolute",top:14,right:14,background:"#f2f2f2",border:"none",borderRadius:"50%",width:38,height:38,cursor:"pointer",fontSize:18,color:"#555"}}>✕</button>
+        <div style={{fontSize:52,marginBottom:10}}>{day.emoji}</div>
+        <div style={{display:"inline-block",background:day.color+"1a",color:day.color,borderRadius:999,padding:"4px 16px",fontSize:13,fontWeight:800,marginBottom:18,letterSpacing:0.5}}>{day.date}</div>
+        <div style={{fontSize:20,fontWeight:800,color:"#111",lineHeight:1.35,marginBottom:14,fontFamily:"Lora,Georgia,serif",fontStyle:"italic"}}>"{day.frase}"</div>
+        <div style={{height:2,background:day.color+"35",borderRadius:99,margin:"0 auto 14px",width:56}}/>
+        <div style={{fontSize:17,color:"#666",lineHeight:1.6,marginBottom:26}}>{day.trad}</div>
+        <button onClick={close} style={{background:day.color,color:"#fff",border:"none",borderRadius:999,padding:"14px 0",fontSize:17,fontWeight:800,cursor:"pointer",width:"100%"}}>Iniziamo! 🚀</button>
+      </div>
+    </div>
+  );
+}
+
+function Card({a,color}){
+  const[open,setOpen]=useState(false);
+  return(
+    <div style={{borderRadius:18,border:"1.5px solid #f0f0f0",marginBottom:10,overflow:"hidden",boxShadow:open?"0 4px 20px rgba(0,0,0,0.08)":"0 1px 4px rgba(0,0,0,0.04)",transition:"box-shadow 0.2s"}}>
+      <button onClick={()=>setOpen(!open)} style={{width:"100%",background:open?"#fafafa":"#fff",border:"none",padding:"16px 16px",display:"flex",alignItems:"center",gap:12,cursor:"pointer",textAlign:"left"}}>
+        <span style={{fontSize:26,flexShrink:0}}>{a.e}</span>
+        <div style={{flex:1,minWidth:0}}>
+          {a.t&&<div style={{fontSize:13,fontWeight:800,color:color,marginBottom:2,letterSpacing:0.5}}>⏰ {a.t}</div>}
+          <div style={{fontSize:17,fontWeight:700,color:"#111",lineHeight:1.3}}>{a.n}</div>
+        </div>
+        <div style={{transform:open?"rotate(180deg)":"rotate(0)",transition:"transform 0.3s",color:"#bbb",flexShrink:0,fontSize:22,lineHeight:1}}>⌄</div>
+      </button>
+      {open&&(
+        <div style={{padding:"0 16px 16px",background:"#fafafa",animation:"slideDown 0.25s ease"}}>
+          <div style={{height:1,background:"#ebebeb",marginBottom:12}}/>
+          <div style={{fontSize:16,color:"#444",lineHeight:1.75,whiteSpace:"pre-line"}}>{a.d}</div>
+          {a.m&&(
+            <a href={a.m} target="_blank" rel="noopener noreferrer"
+               style={{display:"inline-flex",alignItems:"center",gap:8,marginTop:14,padding:"11px 22px",background:"#4285F4",color:"#fff",borderRadius:999,textDecoration:"none",fontSize:15,fontWeight:700,boxShadow:"0 2px 10px rgba(66,133,244,0.3)"}}>
+              📍 Apri in Google Maps
+            </a>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function App(){
+  const[sel,setSel]=useState(null);
+  const[modal,setModal]=useState(false);
+  const[active,setActive]=useState(null);
+  const openDay=d=>{setActive(d);setSel(d);setModal(true);window.scrollTo({top:0,behavior:"smooth"});};
+  return(
+    <div style={{minHeight:"100vh",background:"#fff",fontFamily:"Inter,sans-serif",maxWidth:480,margin:"0 auto"}}>
+      <div style={{background:"#fff",borderBottom:"1.5px solid #f0f0f0",padding:"20px 18px 16px",position:"sticky",top:0,zIndex:100}}>
+        <div style={{display:"flex",alignItems:"center",gap:12}}>
+          <span style={{fontSize:34}}>🌊</span>
+          <div>
+            <div style={{fontFamily:"Lora,Georgia,serif",fontSize:25,fontWeight:700,color:"#111",letterSpacing:-0.5}}>Sicilia 2026</div>
+            <div style={{fontSize:14,color:"#999",fontWeight:600,marginTop:1}}>1–9 Giugno · Castellammare del Golfo</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style={{margin:"18px 14px 6px",background:"linear-gradient(135deg,#1a1a2e,#16213e)",borderRadius:22,padding:"22px 18px",color:"#fff",boxShadow:"0 8px 32px rgba(26,26,46,0.22)"}}>
+          <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:12}}>
+            <div style={{background:"rgba(255,255,255,0.15)",borderRadius:12,width:40,height:40,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20}}>🏠</div>
+            <div>
+              <div style={{fontSize:11,color:"rgba(255,255,255,0.55)",fontWeight:700,letterSpacing:1,textTransform:"uppercase"}}>La Vostra Base</div>
+              <div style={{fontSize:19,fontWeight:800}}>{hotel.name}</div>
+            </div>
+          </div>
+          <div style={{fontSize:15,color:"rgba(255,255,255,0.78)",lineHeight:1.5,marginBottom:14}}>📍 {hotel.address}</div>
+          <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
+            <a href={hotel.maps} target="_blank" rel="noopener noreferrer" style={{display:"inline-flex",alignItems:"center",gap:7,background:"#4285F4",color:"#fff",padding:"11px 18px",borderRadius:999,textDecoration:"none",fontSize:15,fontWeight:700}}>📍 Naviga al B&B</a>
+            <a href={"tel:"+hotel.phone} style={{display:"inline-flex",alignItems:"center",gap:7,background:"rgba(255,255,255,0.14)",color:"#fff",padding:"11px 18px",borderRadius:999,textDecoration:"none",fontSize:15,fontWeight:700,border:"1.5px solid rgba(255,255,255,0.22)"}}>📞 {hotel.phoneDisplay}</a>
+          </div>
+        </div>
+
+        {!sel&&(
+          <div style={{padding:"18px 14px"}}>
+            <div style={{fontFamily:"Lora,Georgia,serif",fontSize:22,fontWeight:700,color:"#111",marginBottom:14}}>Seleziona il Giorno 👇</div>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+              {days.map(d=>(
+                <button key={d.id} onClick={()=>openDay(d)} className="day-btn"
+                  style={{background:"#fff",border:"2px solid "+d.color+"28",borderRadius:18,padding:"16px 12px",cursor:"pointer",textAlign:"left",boxShadow:"0 2px 12px rgba(0,0,0,0.06)",transition:"transform 0.15s,box-shadow 0.15s"}}>
+                  <div style={{fontSize:28,marginBottom:7}}>{d.emoji}</div>
+                  <div style={{fontSize:11,fontWeight:800,color:d.color,letterSpacing:0.8,textTransform:"uppercase",marginBottom:3}}>{d.date.split(" ")[0]} {d.id}</div>
+                  <div style={{fontSize:15,fontWeight:700,color:"#111",lineHeight:1.3}}>{d.title}</div>
+                  <div style={{marginTop:9,display:"flex",alignItems:"center",gap:6}}>
+                    <div style={{height:3,flex:1,background:d.color+"35",borderRadius:99}}/>
+                    <div style={{fontSize:12,color:"#bbb"}}>{d.attivita.length} tappe</div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {sel&&(
+          <div style={{padding:"0 14px 48px"}}>
+            <div style={{marginTop:16,marginBottom:14}}>
+              <button onClick={()=>setSel(null)} className="back-btn" style={{background:"#f5f5f5",border:"none",borderRadius:999,padding:"10px 20px",fontSize:15,fontWeight:700,cursor:"pointer",color:"#555",marginBottom:14}}>← Tutti i giorni</button>
+              <div style={{background:sel.color,borderRadius:22,padding:"20px 18px",color:"#fff",boxShadow:"0 8px 28px "+sel.color+"45"}}>
+                <div style={{fontSize:40,marginBottom:8}}>{sel.emoji}</div>
+                <div style={{fontSize:12,fontWeight:800,opacity:0.85,letterSpacing:1,textTransform:"uppercase",marginBottom:4}}>{sel.date}</div>
+                <div style={{fontFamily:"Lora,Georgia,serif",fontSize:22,fontWeight:700,lineHeight:1.2}}>{sel.title}</div>
+                <div style={{marginTop:12,background:"rgba(255,255,255,0.18)",borderRadius:12,padding:"10px 14px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                  <span style={{fontSize:14,fontWeight:600}}>📍 {sel.attivita.length} tappe oggi</span>
+                  <button onClick={()=>setModal(true)} style={{background:"rgba(255,255,255,0.28)",border:"none",borderRadius:999,padding:"6px 14px",fontSize:13,fontWeight:700,cursor:"pointer",color:"#fff"}}>🎭 Frase</button>
+                </div>
+              </div>
+            </div>
+            <div style={{display:"flex",gap:8,overflowX:"auto",paddingBottom:10,marginBottom:12,scrollbarWidth:"none"}}>
+              {days.map(d=>(
+                <button key={d.id} onClick={()=>openDay(d)}
+                  style={{flexShrink:0,background:d.id===sel.id?d.color:"#f4f4f4",color:d.id===sel.id?"#fff":"#666",border:"none",borderRadius:999,padding:"8px 16px",fontSize:14,fontWeight:700,cursor:"pointer",transition:"all 0.2s"}}>
+                  {d.emoji} {d.id}
+                </button>
+              ))}
+            </div>
+            {sel.attivita.map(a=><Card key={a.id} a={a} color={sel.color}/>)}
+            <div style={{textAlign:"center",padding:"20px 0",color:"#ccc",fontSize:15,fontFamily:"Lora,Georgia,serif",fontStyle:"italic"}}>Fine giornata — Buon riposo! 🌙</div>
+          </div>
+        )}
+
+        <div style={{textAlign:"center",padding:"16px 0 32px",borderTop:"1.5px solid #f2f2f2",color:"#ddd",fontSize:13}}>🌊 Sicilia 2026 · Buon Viaggio! 🌊</div>
+      </div>
+      {modal&&active&&<Modal day={active} onClose={()=>setModal(false)}/>}
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
